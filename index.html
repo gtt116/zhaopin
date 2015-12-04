@@ -17,8 +17,15 @@
   反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
  </p>
 
- <h1>职位薪资走势图</h1>
+ <h1>职位薪资走势图(中位数)</h1>
  <div id="lagou"></div>
+ <p>
+   数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
+   中位数，判断市场行情和走势。
+ </p>
+
+ <h1>职位薪资走势图(众数)</h1>
+ <div id="lagou_mode"></div>
  <p>
    数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
    中位数，判断市场行情和走势。
@@ -130,6 +137,60 @@ $(function() {
         var err = textStatus + ", " + error;
         $('#lagou').html( "Request Failed: " + err );
       });
+
+
+    $.getJSON( "lagou_salary_mode.json" )
+      .done(function( json ) {
+        /*
+         json looks like:
+
+          {
+            "python": [["1990-08-08",2], ['1992-03-03', 3]]
+            "java": [["1990-08-08",2], ['1992-03-03', 3] ]
+          }
+        */
+        console.debug("Parsing json to date")
+        json_data = {};
+        series = [];
+        for (name in json){
+          data = [];
+          items = json[name];
+          for (var j = 0 ; j < items.length ; j++){
+            data.push( [Date.parse(items[j][0]), items[j][1]] );
+          }
+          series.push({'name': name, 'data': data})
+        }
+
+        $('#lagou_mode').highcharts({
+          chart: {
+            type: 'spline'
+          },
+          title: {
+            text: ""
+          },
+          tooltip: {
+            shared: true,
+            crosshairs: true
+          },
+          yAxis: {
+            title: {
+              text: "薪资（K）"
+            }
+          },
+          xAxis: {
+            title: {
+              text: "Datetime"
+            },
+            type: 'datetime'
+          },
+          series: series
+        });
+      })
+      .fail(function( jqxhr, textStatus, error ) {
+        var err = textStatus + ", " + error;
+        $('#lagou_mode').html( "Request Failed: " + err );
+      });
+
   });
  </script>
 </body>

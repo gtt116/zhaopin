@@ -103,11 +103,14 @@ def zhilian():
 
 def update_from_lagou():
     data_type = 'lagou_salary'
+    data_type2 = 'lagou_salary_mode'
     for kw in read_keywords():
         stats = lagou.get_stats(kw)
         save_result(data_type, kw, stats.median)
+        save_result(data_type2, kw, stats.mode)
 
     generate_json(data_type)
+    generate_json(data_type2)
 
 
 if __name__ == '__main__':
