@@ -1,4 +1,10 @@
+python
+java
+ios
+android
 docker
 openstack
 ansible
 puppet
+运维开发
+测试

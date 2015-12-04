@@ -136,7 +136,10 @@ class Stats(object):
     def mode(self):
         if not self._salaries:
             return 0
-        return statistics.mode(self._salaries)
+        try:
+            return statistics.mode(self._salaries)
+        except Exception:
+            return self.median
 
 
 class Lagou(object):
