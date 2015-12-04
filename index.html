@@ -7,29 +7,38 @@
   h1, p {
     text-align: center;
   }
+
+  .half {
+    width: 45%;
+    display: inline-block;
+  }
   </style>
 </head>
 <body>
- <h1>职位数量走势图</h1>
+
+ <h1>智联职位数量走势图</h1>
  <div id="zhilian"></div>
  <p>
   数据来源于智联招聘（zhaopin.com）每天抓取特定关键词的职位数量，通过职位数量
   反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
  </p>
 
- <h1>职位薪资走势图(中位数)</h1>
- <div id="lagou"></div>
- <p>
-   数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
-   中位数，判断市场行情和走势。
- </p>
+  <h1>lagou: 职位薪资走势图</h1>
 
- <h1>职位薪资走势图(众数)</h1>
- <div id="lagou_mode"></div>
- <p>
-   数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
-   中位数，判断市场行情和走势。
- </p>
+  <div class="half">
+    <h2>中位数</h2>
+    <div id="lagou"></div>
+ </div>
+
+  <div class="half">
+    <h2>众数</h2>
+    <div id="lagou_mode"></div>
+  </div>
+
+  <p>
+    数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
+    中位数，判断市场行情和走势。
+  </p>
 
  <script>
 $(function() {
