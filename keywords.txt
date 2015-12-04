@@ -1,0 +1,4 @@
+docker
+openstack
+ansible
+puppet

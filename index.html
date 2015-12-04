@@ -1,0 +1,76 @@
+<!doctype html>
+<head>
+  <title>职位数量走势图</title>
+  <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://cdn.bootcss.com/highcharts/4.1.7/highcharts.js"></script>
+  <style>
+  h1, p {
+    text-align: center;
+  }
+  </style>
+</head>
+<body>
+ <h1>职位数量走势图</h1>
+ <div id="compare"></div>
+ <p>
+  数据来源于智联招聘（zhaopin.com）每天抓取特定关键词的职位数量，通过职位数量
+  反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
+ </p>
+
+ <script>
+$(function() {
+    $.getJSON( "data.json" )
+      .done(function( json ) {
+        /*
+         json looks like:
+
+          {
+            "python": [["1990-08-08",2], ['1992-03-03', 3]]
+            "java": [["1990-08-08",2], ['1992-03-03', 3] ]
+          }
+        */
+        console.debug("Parsing json to date")
+        json_data = {};
+        series = [];
+        for (name in json){
+          data = [];
+          items = json[name];
+          for (var j = 0 ; j < items.length ; j++){
+            data.push( [Date.parse(items[j][0]), items[j][1]] );
+          }
+          series.push({'name': name, 'data': data})
+        }
+
+        $('#compare').highcharts({
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: ""
+          },
+          tooltip: {
+            shared: true,
+            crosshairs: true
+          },
+          yAxis: {
+            title: {
+              text: "数量"
+            }
+          },
+          xAxis: {
+            title: {
+              text: "Datetime"
+            },
+            type: 'datetime'
+          },
+          series: series
+        });
+      })
+      .fail(function( jqxhr, textStatus, error ) {
+        var err = textStatus + ", " + error;
+        $('#compare').html( "Request Failed: " + err );
+      });
+  });
+ </script>
+</body>
+</html>
