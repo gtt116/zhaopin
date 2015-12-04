@@ -1,2 +1,6 @@
 datas/*
 .venv
+.ropeproject/
+lagou_salary/*
+zhilian_count/*
+*.pyc
