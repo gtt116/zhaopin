@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 import os
 import time
 import urllib2
@@ -56,7 +57,7 @@ def generate_json():
 
 
 def main():
-    base_url = 'http://sou.zhaopin.com/jobs/searchresult.ashx?&kw=%(kw)s'
+    base_url = 'http://sou.zhaopin.com/jobs/searchresult.ashx?kw=%(kw)s&jl=全国'
 
     for key in read_keywords():
         url = base_url % {'kw': key}
@@ -64,7 +65,7 @@ def main():
 
         while True:
             try:
-                response = urllib2.urlopen(url)
+                response = urllib2.urlopen(url, timeout=8)
                 body = response.read()
             except Exception as ex:
                 print ex
