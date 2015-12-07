@@ -57,8 +57,10 @@ class Stats(object):
 
         # this variable contains the row salary without aggreation
         self._salaries = []
+        self._position_count = 0
 
     def add_position(self, postion):
+        self._position_count += 1
         for salary in postion.salary_range():
             self._postions[salary] += 1
             self._salaries.append(salary)
@@ -140,6 +142,10 @@ class Stats(object):
             return statistics.mode(self._salaries)
         except Exception:
             return self.median
+
+    @property
+    def count(self):
+        return self._position_count
 
 
 class Lagou(object):
