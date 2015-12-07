@@ -1,55 +1,56 @@
 <!doctype html>
 <html xmlns=http://www.w3.org/1999/xhtml>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>职位数量走势图</title>
+    <title>职位数量走势图</title>
 
-<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://cdn.bootcss.com/highcharts/4.1.7/highcharts.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/highcharts/4.1.7/highcharts.js"></script>
 
-<style>
-h1,h2,p {
-  text-align: center;
-}
+    <style>
+      h1,h2,p {
+        text-align: center;
+      }
 
-.half {
-  width: 45%;
-  display: inline-block;
-}
-</style>
-</head>
-<body>
+      .half {
+        width: 45%;
+        display: inline-block;
+      }
+    </style>
+  </head>
 
- <h1>智联职位数量走势图</h1>
- <div id="zhilian"></div>
- <p>
-  数据来源于智联招聘（zhaopin.com）每天抓取特定关键词的职位数量，通过职位数量
-  反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
- </p>
+  <body>
 
-  <h1>lagou: 职位薪资走势图</h1>
-  <h2>数量走势</h2>
-  <div id="lagou_count"></div>
+    <h1>智联职位数量走势图</h1>
+    <div id="zhilian"></div>
+    <p>
+      数据来源于智联招聘（zhaopin.com）每天抓取特定关键词的职位数量，通过职位数量
+      反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
+    </p>
 
-  <div class="half">
-    <h2>中位数</h2>
-    <div id="lagou"></div>
- </div>
+    <h1>lagou: 职位薪资走势图</h1>
+    <h2>数量走势</h2>
+    <div id="lagou_count"></div>
 
-  <div class="half">
-    <h2>众数</h2>
-    <div id="lagou_mode"></div>
-  </div>
+    <div class="half">
+      <h2>中位数</h2>
+      <div id="lagou"></div>
+    </div>
 
-  <p>
-    数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
-    中位数，判断市场行情和走势。
-  </p>
+    <div class="half">
+      <h2>众数</h2>
+      <div id="lagou_mode"></div>
+    </div>
 
- <script>
+    <p>
+      数据来源于拉钩网（lagou.com）每天抓取特定关键词的职位，通过计算职位的薪资
+      中位数，判断市场行情和走势。
+    </p>
+
+    <script>
 $(function() {
-    function render_highcharts( json_url, div_id, y_text ){
+  function render_highcharts( json_url, div_id, y_text ){
 
       $.getJSON( json_url )
         .done(function( json ) {
@@ -116,6 +117,6 @@ $(function() {
     render_highcharts("lagou_salary_mode.json", "#lagou_mode", "薪资(K)");
 
   });
- </script>
-</body>
+    </script>
+  </body>
 </html>
