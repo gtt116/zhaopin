@@ -4,7 +4,7 @@
   <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
   <script src="http://cdn.bootcss.com/highcharts/4.1.7/highcharts.js"></script>
   <style>
-  h1, p {
+  h1,h2,p {
     text-align: center;
   }
 
@@ -24,6 +24,8 @@
  </p>
 
   <h1>lagou: 职位薪资走势图</h1>
+  <h2>数量走势</h2>
+  <div id="lagou_count"></div>
 
   <div class="half">
     <h2>中位数</h2>
@@ -42,163 +44,71 @@
 
  <script>
 $(function() {
-    $.getJSON( "zhilian_count.json" )
-      .done(function( json ) {
-        /*
-         json looks like:
+    function render_highcharts( json_url, div_id, y_text ){
 
-          {
-            "python": [["1990-08-08",2], ['1992-03-03', 3]]
-            "java": [["1990-08-08",2], ['1992-03-03', 3] ]
-          }
-        */
-        console.debug("Parsing json to date")
-        json_data = {};
-        series = [];
-        for (name in json){
-          data = [];
-          items = json[name];
-          for (var j = 0 ; j < items.length ; j++){
-            data.push( [Date.parse(items[j][0]), items[j][1]] );
-          }
-          series.push({'name': name, 'data': data})
-        }
+      $.getJSON( json_url )
+        .done(function( json ) {
+          /*
+          json looks like:
 
-        $('#zhilian').highcharts({
-          chart: {
-            type: 'spline'
-          },
-          title: {
-            text: ""
-          },
-          tooltip: {
-            shared: true,
-            crosshairs: true
-          },
-          yAxis: {
-            title: {
-              text: "数量"
+            {
+              "python": [["1990-08-08",2], ['1992-03-03', 3]]
+              "java": [["1990-08-08",2], ['1992-03-03', 3] ]
             }
-          },
-          xAxis: {
-            title: {
-              text: "Datetime"
-            },
-            type: 'datetime'
-          },
-          series: series
-        });
-      })
-      .fail(function( jqxhr, textStatus, error ) {
-        var err = textStatus + ", " + error;
-        $('#zhilian').html( "Request Failed: " + err );
-      });
-
-
-    $.getJSON( "lagou_salary.json" )
-      .done(function( json ) {
-        /*
-         json looks like:
-
-          {
-            "python": [["1990-08-08",2], ['1992-03-03', 3]]
-            "java": [["1990-08-08",2], ['1992-03-03', 3] ]
-          }
-        */
-        console.debug("Parsing json to date")
-        json_data = {};
-        series = [];
-        for (name in json){
-          data = [];
-          items = json[name];
-          for (var j = 0 ; j < items.length ; j++){
-            data.push( [Date.parse(items[j][0]), items[j][1]] );
-          }
-          series.push({'name': name, 'data': data})
-        }
-
-        $('#lagou').highcharts({
-          chart: {
-            type: 'spline'
-          },
-          title: {
-            text: ""
-          },
-          tooltip: {
-            shared: true,
-            crosshairs: true
-          },
-          yAxis: {
-            title: {
-              text: "薪资（K）"
+          */
+          console.debug("Parsing json to date")
+          json_data = {};
+          series = [];
+          for (name in json){
+            data = [];
+            items = json[name];
+            for (var j = 0 ; j < items.length ; j++){
+              data.push( [Date.parse(items[j][0]), items[j][1]] );
             }
-          },
-          xAxis: {
-            title: {
-              text: "Datetime"
-            },
-            type: 'datetime'
-          },
-          series: series
-        });
-      })
-      .fail(function( jqxhr, textStatus, error ) {
-        var err = textStatus + ", " + error;
-        $('#lagou').html( "Request Failed: " + err );
-      });
-
-
-    $.getJSON( "lagou_salary_mode.json" )
-      .done(function( json ) {
-        /*
-         json looks like:
-
-          {
-            "python": [["1990-08-08",2], ['1992-03-03', 3]]
-            "java": [["1990-08-08",2], ['1992-03-03', 3] ]
+            series.push({'name': name, 'data': data})
           }
-        */
-        console.debug("Parsing json to date")
-        json_data = {};
-        series = [];
-        for (name in json){
-          data = [];
-          items = json[name];
-          for (var j = 0 ; j < items.length ; j++){
-            data.push( [Date.parse(items[j][0]), items[j][1]] );
-          }
-          series.push({'name': name, 'data': data})
-        }
 
-        $('#lagou_mode').highcharts({
-          chart: {
-            type: 'spline'
-          },
-          title: {
-            text: ""
-          },
-          tooltip: {
-            shared: true,
-            crosshairs: true
-          },
-          yAxis: {
-            title: {
-              text: "薪资（K）"
-            }
-          },
-          xAxis: {
-            title: {
-              text: "Datetime"
+          $(div_id).highcharts({
+            chart: {
+              type: 'spline'
             },
-            type: 'datetime'
+            title: {
+              text: ""
+            },
+            tooltip: {
+              shared: true,
+              crosshairs: true,
+              xDateFormat: '%Y-%m-%d',
+            },
+            yAxis: {
+              title: {
+                text: y_text
+              }
+            },
+            xAxis: {
+              title: {
+                text: "Datetime"
+              },
+              type: 'datetime',
+              dateTimeLabelFormats: {
+                day: '%m-%d',
+                month: "%m",
+              },
           },
-          series: series
+            series: series
+          });
+        })
+        .fail(function( jqxhr, textStatus, error ) {
+          var err = textStatus + ", " + error;
+          $(div_id).html( "Request Failed: " + err );
         });
-      })
-      .fail(function( jqxhr, textStatus, error ) {
-        var err = textStatus + ", " + error;
-        $('#lagou_mode').html( "Request Failed: " + err );
-      });
+
+    }
+
+    render_highcharts("zhilian_count.json", "#zhilian", "数量");
+    render_highcharts("lagou_count.json", "#lagou_count", "数量");
+    render_highcharts("lagou_salary.json", "#lagou", "薪资(K)");
+    render_highcharts("lagou_salary_mode.json", "#lagou_mode", "薪资(K)");
 
   });
  </script>
