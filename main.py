@@ -8,7 +8,6 @@ sys.path.insert(0, PWD)
 import traceback
 import time
 import urllib2
-import urllib
 import collections
 import json
 from datetime import datetime
@@ -134,8 +133,7 @@ class Zhilian(JobCounter):
 class Job51(JobCounter):
 
     def get_url(self, key):
-        key = urllib.quote(key)
-        url = 'http://search.51job.com/list/%2B,%2B,%2B,%2B,%2B,%2B,{0},2,%2B.html?lang=c&stype=1&image_x=53&image_y=9'.format(key)
+        url = 'http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=000000%2C00&funtype=0000&industrytype=00&keyword={0}&keywordtype=2&lang=c&stype=2&postchannel=0000&fromType=1&confirmdate=9'.format(key)
         return url
 
     def get_data_type(self):
@@ -170,13 +168,14 @@ def update_from_lagou():
 
 
 if __name__ == '__main__':
+
     try:
-        Zhilian().run()
+        Job51().run()
     except Exception as ex:
         traceback.print_exc()
 
     try:
-        Job51().run()
+        Zhilian().run()
     except Exception as ex:
         traceback.print_exc()
 
