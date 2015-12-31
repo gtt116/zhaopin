@@ -29,6 +29,13 @@
       反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
     </p>
 
+    <h1>51job 职位数量走势图</h1>
+    <div id="job51"></div>
+    <p>
+      数据来源于智联招聘（51job.com）每天抓取特定关键词的职位数量，通过职位数量
+      反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
+    </p>
+
     <h1>lagou: 职位薪资走势图</h1>
     <h2>数量走势</h2>
     <div id="lagou_count"></div>
@@ -112,6 +119,7 @@ $(function() {
     }
 
     render_highcharts("zhilian_count.json", "#zhilian", "数量");
+    render_highcharts("job51_count.json", "#job51", "数量");
     render_highcharts("lagou_count.json", "#lagou_count", "数量");
     render_highcharts("lagou_salary.json", "#lagou", "薪资(K)");
     render_highcharts("lagou_salary_mode.json", "#lagou_mode", "薪资(K)");
