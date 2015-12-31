@@ -10,4 +10,4 @@ else
 fi
 
 cp -v $HERE/index.html /var/www/tieba/zhaopin
-cp -v $HERE/data.json /var/www/tieba/zhaopin
+cp -v $HERE/*.json /var/www/tieba/zhaopin

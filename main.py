@@ -157,13 +157,16 @@ class Job51(JobCounter):
 def update_from_lagou():
     data_type = 'lagou_salary'
     data_type2 = 'lagou_salary_mode'
+    data_type3 = 'lagou_count'
     for kw in read_keywords():
         stats = lagou.get_stats(kw)
         save_result(data_type, kw, stats.median)
         save_result(data_type2, kw, stats.mode)
+        save_result(data_type3, kw, stats.count)
 
     generate_json(data_type)
     generate_json(data_type2)
+    generate_json(data_type3)
 
 
 if __name__ == '__main__':
