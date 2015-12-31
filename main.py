@@ -8,6 +8,7 @@ sys.path.insert(0, PWD)
 import traceback
 import time
 import urllib2
+import urllib
 import collections
 import json
 from datetime import datetime
@@ -71,34 +72,86 @@ def generate_json(data_type, output_file=None):
         outputfile.flush()
 
 
-def zhilian():
-    base_url = 'http://sou.zhaopin.com/jobs/searchresult.ashx?kw=%(kw)s&jl=全国'
+class JobCounter(object):
 
-    for key in read_keywords():
-        url = base_url % {'kw': key}
-        print "Fetch page: %s" % url
+    def run(self):
 
-        while True:
-            try:
-                response = urllib2.urlopen(url, timeout=8)
-                body = response.read()
-            except Exception as ex:
-                print ex
-                print 'retry after 1 second'
-                time.sleep(1)
-            else:
-                break
+        for key in read_keywords():
+            url = self.get_url(key)
+            print "Fetch page: %s" % url
 
+            while True:
+                try:
+                    response = self.get_response(url)
+                    body = response.read()
+                except Exception as ex:
+                    print ex
+                    print 'retry after 1 second'
+                    time.sleep(1)
+                else:
+                    break
+
+            count = self.get_job_count(body)
+            print "Found count: %s" % count
+
+            data_type = self.get_data_type()
+            save_result(data_type, key, count)
+
+        generate_json(data_type)
+        print 'Done'
+
+    def get_data_type(self):
+        raise NotImplementedError()
+
+    def get_url(self, key):
+        raise NotImplementedError()
+
+    def get_response(self, url):
+        raise NotImplementedError()
+
+    def get_job_count(self, body):
+        raise NotImplementedError()
+
+
+class Zhilian(JobCounter):
+
+    def get_url(self, key):
+        return 'http://sou.zhaopin.com/jobs/searchresult.ashx?kw=%(kw)s&jl=全国' % {'kw': key}
+
+    def get_data_type(self):
+        return 'zhilian_count'
+
+    def get_response(self, url):
+        return urllib2.urlopen(url, timeout=8)
+
+    def get_job_count(self, body):
         bs = BS(body, "html.parser")
         em = bs.find('span', class_="search_yx_tj").find('em')
         count = em.string
-        print "Found count: %s" % count
+        return count
 
-        data_type = 'zhilian_count'
-        save_result(data_type, key, count)
 
-    generate_json(data_type)
-    print 'Done'
+class Job51(JobCounter):
+
+    def get_url(self, key):
+        key = urllib.quote(key)
+        url = 'http://search.51job.com/list/%2B,%2B,%2B,%2B,%2B,%2B,{0},2,%2B.html?lang=c&stype=1&image_x=53&image_y=9'.format(key)
+        return url
+
+    def get_data_type(self):
+        return 'job51_count'
+
+    def get_response(self, url):
+        req = urllib2.Request(url)
+        req.add_header(
+            'Cookie', 'guid=145157308952880058; search=jobarea%7E%60000000%7C%21ord_field%7E%600%7C%21list_type%7E%600%7C%21; guide=1'
+        )
+        response = urllib2.urlopen(req, timeout=8)
+        return response
+
+    def get_job_count(self, body):
+        bs = BS(body, "html.parser")
+        return bs.find('input', attrs={'name': 'jobid_count'})['value']
 
 
 def update_from_lagou():
@@ -115,7 +168,12 @@ def update_from_lagou():
 
 if __name__ == '__main__':
     try:
-        zhilian()
+        Zhilian().run()
+    except Exception as ex:
+        traceback.print_exc()
+
+    try:
+        Job51().run()
     except Exception as ex:
         traceback.print_exc()
 
