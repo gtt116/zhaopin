@@ -190,7 +190,12 @@ class Lagou(object):
             'X-Requested-With': 'XMLHttpRequest',
         }
         LOG.info("Loading %s" % data)
-        response = requests.post(self.url, data, headers=headers)
+        while True:
+            try:
+                response = requests.post(self.url, data, headers=headers, timeout=5)
+                break
+            except Exception:
+                continue
         LOG.info("Loaded %s" % data)
         return response.json()
 
