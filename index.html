@@ -22,31 +22,31 @@
 
   <body>
 
-    <h1>智联职位数量走势图</h1>
+    <h1>智联职位数量走势图<input type="button" onclick="javascript:hide('zhilian');" value="X"/></h1>
     <div id="zhilian"></div>
     <p>
       数据来源于智联招聘（zhaopin.com）每天抓取特定关键词的职位数量，通过职位数量
       反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
     </p>
 
-    <h1>51job 职位数量走势图</h1>
+    <h1>51job 职位数量走势图<input type="button" onclick="javascript:hide('job51');" value="X"/></h1>
     <div id="job51"></div>
     <p>
       数据来源于智联招聘（51job.com）每天抓取特定关键词的职位数量，通过职位数量
       反应技术的市场接纳率，特别是新型的技术，如 docker， openstack 等。
     </p>
 
-    <h1>lagou: 职位薪资走势图</h1>
-    <h2>数量走势</h2>
+    <h1>lagou 走势图</h1>
+    <h2>数量走势<input type="button" onclick="javascript:hide('lagou_count');" value="X"/></h2>
     <div id="lagou_count"></div>
 
     <div class="half">
-      <h2>中位数</h2>
+      <h2>中位数<input type="button" onclick="javascript:hide('lagou');" value="X"/></h2>
       <div id="lagou"></div>
     </div>
 
     <div class="half">
-      <h2>众数</h2>
+      <h2>众数<input type="button" onclick="javascript:hide('lagou_mode');" value="X"/></h2>
       <div id="lagou_mode"></div>
     </div>
 
@@ -56,6 +56,14 @@
     </p>
 
     <script>
+function hide(div_id){
+  div_id = '#' + div_id;
+  var chart = $(div_id).highcharts();
+  for (var i = 0 ; i < chart.series.length; i++){
+    chart.series[i].hide();
+  }
+}
+
 $(function() {
   function render_highcharts( json_url, div_id, y_text ){
 
