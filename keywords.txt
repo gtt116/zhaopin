@@ -3,8 +3,10 @@ java
 ios
 android
 docker
+ceph
 openstack
 ansible
 puppet
-运维开发
-测试
+hadoop
+go
+云计算
