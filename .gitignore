@@ -6,3 +6,4 @@ zhilian_count/*
 lagou_count/*
 *.pyc
 lagou_salary_mode/
+wrapper.py
