@@ -3,3 +3,4 @@ requests
 eventlet
 greenlet
 statistics
+raven
