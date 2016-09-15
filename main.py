@@ -108,8 +108,7 @@ class Job51(JobCounter):
         return bs.find('input', attrs={'name': 'jobid_count'})['value']
 
 
-if __name__ == '__main__':
-
+def main():
     try:
         Job51().run()
     except Exception as ex:
@@ -119,3 +118,8 @@ if __name__ == '__main__':
         Zhilian().run()
     except Exception as ex:
         traceback.print_exc()
+
+
+if __name__ == '__main__':
+    main()
+
