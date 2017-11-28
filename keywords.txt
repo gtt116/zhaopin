@@ -1,4 +1,5 @@
 python
+cassandra
 java
 ios
 android
@@ -8,5 +9,14 @@ openstack
 ansible
 puppet
 hadoop
+elasticsearch
+大数据
 go
+php
 云计算
+运维开发
+测试开发
+devops
+架构师
+机器学习
+人工智能
