@@ -71,13 +71,18 @@ class JobCounter(object):
 class Zhilian(JobCounter):
 
     def get_url(self, key):
-        return 'http://sou.zhaopin.com/jobs/searchresult.ashx?kw=%(kw)s&jl=全国' % {'kw': key}
+        return 'http://sou.zhaopin.com/jobs/searchresult.ashx?kw=%(kw)s&jl=全国&sm=0' % {'kw': key}
 
     def get_data_type(self):
         return 'zhilian_count'
 
     def get_response(self, url):
-        return urllib2.urlopen(url, timeout=8)
+        req = urllib2.Request(url)
+        req.add_header(
+            'user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko)'
+        )
+        response = urllib2.urlopen(req, timeout=8)
+        return response
 
     def get_job_count(self, body):
         bs = BS(body, "html.parser")
